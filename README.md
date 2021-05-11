@@ -10,7 +10,6 @@
 * Apply LSTM 
 * ~~Apply LSTM on clustered space~~
 
-
 ### Potential: 
 * Imitation learning
 * Ensemble models
