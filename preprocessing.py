@@ -63,5 +63,5 @@ with open(ld_file) as f:
             df = df.append(data, ignore_index=True)
             #print(data)
 
-df.to_csv('data_ld_vecAdd.csv')
+df.to_csv('data_ld_bfs.csv', index=False)
 print("Done")
