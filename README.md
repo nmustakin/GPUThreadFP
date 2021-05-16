@@ -3,12 +3,12 @@
 ## Learn indirect memory access patterns of GPU threads
 
 ### To-do: 
-* ~~Visualize address space~~ Each address occurs only once, address space is contiguous  
-* ~~Cluster address space by threads/blocks~~ Contiguous address space
-* ~~Seperate Indirect accesses~~ no way to differentiate
-* Calculate input and output deltas 
-* Apply LSTM 
-* ~~Apply LSTM on clustered space~~
+* ~~Visualize address space~~ - Done  
+* ~~Cluster address space by threads/blocks~~ - Done
+* ~~Seperate Indirect accesses~~ - Done
+* Calculate input and output deltas - Might not be required 
+* ~~Apply LSTM~~ 
+* ~~Apply LSTM on clustered space~~ 
 
 ### Potential: 
 * Imitation learning
