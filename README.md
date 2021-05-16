@@ -8,7 +8,7 @@
 * ~~Seperate Indirect accesses~~ - Done
 * Calculate input and output deltas - Might not be required 
 * ~~Apply LSTM~~ 
-* ~~Apply LSTM on clustered space~~ 
+* Apply LSTM on clustered space 
 
 ### Potential: 
 * Imitation learning
