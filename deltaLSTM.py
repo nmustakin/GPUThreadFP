@@ -53,15 +53,21 @@ if __name__ == "__main__":
   #plt.show()
 
 
+  #trimming doesn't work
+  
+  trim = int(len(normalizedDeltas)*0.92)
+  normalizedDeltas = normalizedDeltas[trim:len(normalizedDeltas),:]
+  print(normalizedDeltas)
+
   # split into train and test sets
-  train_size = int(len(normalizedDeltas) * 0.9)
+  train_size = int(len(normalizedDeltas) * 0.67)
   test_size = len(normalizedDeltas) - train_size
   train, test = normalizedDeltas[0:train_size,:], normalizedDeltas[train_size:len(normalizedDeltas),:]
   print(len(train), len(test))
 
 
   # reshape into X=t and Y=t+1
-  look_back = 1
+  look_back = 3
   trainX, trainY = create_dataset(train, look_back)
   testX, testY = create_dataset(test, look_back)
 
@@ -72,7 +78,7 @@ if __name__ == "__main__":
   model.add(LSTM(4, input_shape=(1, look_back)))
   model.add(Dense(1))
   model.compile(loss='mean_squared_error', optimizer='adam')
-  model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2)
+  model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 
   #make predictions
   trainPredict = model.predict(trainX)
@@ -99,7 +105,8 @@ if __name__ == "__main__":
   testPredictPlot[:, :] = np.nan
   testPredictPlot[len(trainPredict)+(look_back*2)+1:len(normalizedDeltas)-1, :] = testPredict
   # plot baseline and predictions
-  plt.plot(scaler.inverse_transform(normalizedDeltas))
-  plt.plot(trainPredictPlot)
-  plt.plot(testPredictPlot)
+  plt.plot(scaler.inverse_transform(normalizedDeltas), label="actual")
+  plt.plot(trainPredictPlot, label="train predictions")
+  plt.plot(testPredictPlot, label="test predictions")
+  plt.legend()
   plt.show()
