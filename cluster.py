@@ -5,7 +5,7 @@ import sys
 from sklearn.neighbors import LocalOutlierFactor
 
 if len(sys.argv) < 2:
-  print('Format: python3 visualize.py [Filename]')
+  print('Format: python3 cluster.py [Filename]')
   sys.exit(0)
 inputFile = str(sys.argv[1])
 df = pd.read_csv(inputFile)
