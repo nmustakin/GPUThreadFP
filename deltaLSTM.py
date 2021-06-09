@@ -1,3 +1,4 @@
+from keras.layers.recurrent import SimpleRNN
 import pandas as pd 
 import numpy as np
 import sys
@@ -75,7 +76,9 @@ if __name__ == "__main__":
   testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
   model = Sequential()
-  model.add(LSTM(4, input_shape=(1, look_back)))
+  # 220 best so far
+  model.add(LSTM(220, input_shape=(1, look_back)))
+  #model.add(SimpleRNN(512))
   model.add(Dense(1))
   model.compile(loss='mean_squared_error', optimizer='adam')
   model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
@@ -110,3 +113,5 @@ if __name__ == "__main__":
   plt.plot(testPredictPlot, label="test predictions")
   plt.legend()
   plt.show()
+
+  model.save('Best220')
