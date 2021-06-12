@@ -21,20 +21,6 @@ df = pd.read_csv(inputFile)
 array = df[['TB', 'tid', 'addr']].values
 
 
-### Each address occurs only once
-
-# addresses = {}
-# for data in array:
-#     key = int(data[2])
-#     if key in addresses:
-#         addresses[key]+= 1
-#     else: 
-#         addresses[key] = 1 
-# print(addresses)
-
-
-### Memory addresses seem to be contiguous, there are no clusters 
-
 x = [[]]
 y = [[]]
 z = []

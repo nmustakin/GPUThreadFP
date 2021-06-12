@@ -13,13 +13,18 @@ df = pd.read_csv(inputFile)
 addresses = df[['addr']].values
 TBs = df[['TB', 'addr']].values
 
+#detect outliers
+
 clf = LocalOutlierFactor(n_neighbors=26)
 pred = clf.fit_predict(addresses)
+
 
 x = [[], []]
 y = [[], []]
 
 TB = {}
+
+#plot outliers vs central block 
 
 for i in range(0, len(addresses)): 
   if pred[i] == 1: 
@@ -44,6 +49,8 @@ plt.show()
 
 x = [[], []]
 y = [[], []]
+
+#plot TB 0 vs others
 
 for i in range(0, len(TBs)):  
   

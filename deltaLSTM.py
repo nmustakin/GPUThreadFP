@@ -23,9 +23,14 @@ def create_dataset(dataset, look_back=1):
 
 if __name__ == "__main__":
   if len(sys.argv) < 2:
-    print('Format: python3 deltaLSTM.py [Filename]')
+    print('Format: python3 deltaLSTM.py [Filename] [mode=LSTM/RNN] [blocks] [lookback]')
     sys.exit(0)
   inputFile = str(sys.argv[1])
+  mode = str(sys.argv[2])
+  blocks = int(sys.argv[3])
+  look_back = int(sys.argv[4])
+
+
   df = pd.read_csv(inputFile)
 
 
@@ -35,26 +40,14 @@ if __name__ == "__main__":
 
   addresses = df[['addr']].values
 
-  #print(addresses)
-
+  #calculate deltas
   deltas = np.subtract(addresses[1:], addresses[:-1])
 
-  #print(deltas)
-
-  #print(np.max(deltas), np.min(deltas))
-
-  nonOne = np.delete(deltas, np.where(deltas == 1.0))
-
-  #print(nonOne, len(nonOne))
-
+  #scale deltas to fit into 0,1 range for training LSTM 
   scaler = MinMaxScaler(feature_range=(0, 1))
   normalizedDeltas = scaler.fit_transform(deltas)
 
-  #plt.plot(np.arange(len(deltas)), deltas, marker='.', markersize = 6.0)
-  #plt.show()
-
-
-  #trimming doesn't work
+  #train on the indirect memory access range only
   
   trim = int(len(normalizedDeltas)*0.92)
   normalizedDeltas = normalizedDeltas[trim:len(normalizedDeltas),:]
@@ -68,19 +61,28 @@ if __name__ == "__main__":
 
 
   # reshape into X=t and Y=t+1
-  look_back = 3
+  #look_back = 3  --- taken as input directly 
   trainX, trainY = create_dataset(train, look_back)
   testX, testY = create_dataset(test, look_back)
 
   trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
   testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
+  #define model 
   model = Sequential()
-  # 220 best so far
-  model.add(LSTM(220, input_shape=(1, look_back)))
-  #model.add(SimpleRNN(512))
+  
+  if(mode == 'LSTM'):
+    model.add(LSTM(blocks, input_shape=(1, look_back)))
+  
+  else:
+    model.add(SimpleRNN(blocks))
+
   model.add(Dense(1))
+  
+  #set loss function to RMSE
   model.compile(loss='mean_squared_error', optimizer='adam')
+
+  #train for 100 epochs
   model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 
   #make predictions
@@ -114,4 +116,5 @@ if __name__ == "__main__":
   plt.legend()
   plt.show()
 
-  model.save('Best220')
+  #save model for future use 
+  model.save(mode+str(blocks)+'_'+str(look_back))
